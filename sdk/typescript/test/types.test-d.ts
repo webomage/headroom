@@ -16,6 +16,7 @@ import type {
   ProxyCompressResponse,
   ProxyErrorResponse,
 } from "../src/types.js";
+import type { CompressRequestConfig } from "../src/types/config.js";
 import {
   HeadroomError,
   HeadroomConnectionError,
@@ -65,9 +66,9 @@ describe("Message types", () => {
     >();
   });
 
-  it("AssistantMessage content can be string or null", () => {
+  it("AssistantMessage content can be a string, content parts, or null", () => {
     expectTypeOf<AssistantMessage["role"]>().toEqualTypeOf<"assistant">();
-    expectTypeOf<AssistantMessage["content"]>().toEqualTypeOf<string | null>();
+    expectTypeOf<AssistantMessage["content"]>().toEqualTypeOf<string | ContentPart[] | null>();
   });
 
   it("AssistantMessage tool_calls is optional", () => {
@@ -176,7 +177,10 @@ describe("HeadroomClientInterface", () => {
 
   it("compress accepts messages and optional options", () => {
     expectTypeOf<HeadroomClientInterface["compress"]>().parameters.toEqualTypeOf<
-      [OpenAIMessage[], ({ model?: string; tokenBudget?: number } | undefined)?]
+      [
+        OpenAIMessage[],
+        ({ model?: string; tokenBudget?: number; config?: CompressRequestConfig } | undefined)?,
+      ]
     >();
   });
 });
